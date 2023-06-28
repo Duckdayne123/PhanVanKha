@@ -5,8 +5,8 @@ const cluster = require("cluster");
 const os = require("os");
 
 const cpus = os.cpus().length;
-const port = 8080;
-const index = fs.readFileSync("./index.html");
+const port = process.env.PORT || 3000;
+const index = fs.readFileSync(__dirname + "/index.html");
 
 if (cluster.isMaster) {
   console.log(`Number of CPUs is ${cpus}`);
@@ -47,5 +47,7 @@ if (cluster.isMaster) {
     wss.clients.forEach((client) => client.send(requests));
   });
 
-  server.listen(port);
+  server.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+  });
 }
